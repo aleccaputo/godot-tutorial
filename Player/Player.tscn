@@ -1,9 +1,10 @@
-[gd_scene load_steps=52 format=2]
+[gd_scene load_steps=54 format=2]
 
 [ext_resource path="res://Player/Player.png" type="Texture" id=1]
 [ext_resource path="res://Player/Player.gd" type="Script" id=2]
 [ext_resource path="res://Overlap/HitBox.tscn" type="PackedScene" id=3]
 [ext_resource path="res://Player/SwordHitbox.gd" type="Script" id=4]
+[ext_resource path="res://Overlap/Hurtbox.tscn" type="PackedScene" id=5]
 
 [sub_resource type="CapsuleShape2D" id=1]
 radius = 4.0
@@ -622,13 +623,13 @@ blend_mode = 1
 
 [sub_resource type="AnimationNodeStateMachine" id=21]
 states/Attack/node = SubResource( 33 )
-states/Attack/position = Vector2( -119.614, 192 )
+states/Attack/position = Vector2( -99.364, 190 )
 states/Idle/node = SubResource( 15 )
-states/Idle/position = Vector2( -119.614, 105 )
+states/Idle/position = Vector2( -97.614, 57 )
 states/Roll/node = SubResource( 45 )
-states/Roll/position = Vector2( -252.114, 66 )
+states/Roll/position = Vector2( -284.114, 57.75 )
 states/Run/node = SubResource( 20 )
-states/Run/position = Vector2( 128.386, 105 )
+states/Run/position = Vector2( 124.886, 54.75 )
 transitions = [ "Idle", "Run", SubResource( 23 ), "Run", "Idle", SubResource( 24 ), "Idle", "Attack", SubResource( 34 ), "Attack", "Idle", SubResource( 35 ), "Roll", "Idle", SubResource( 46 ), "Idle", "Roll", SubResource( 47 ) ]
 start_node = "Idle"
 graph_offset = Vector2( -363.614, 0 )
@@ -637,6 +638,10 @@ graph_offset = Vector2( -363.614, 0 )
 
 [sub_resource type="CapsuleShape2D" id=36]
 height = 12.0
+
+[sub_resource type="CapsuleShape2D" id=48]
+radius = 5.0
+height = 4.0
 
 [node name="Player" type="KinematicBody2D"]
 collision_layer = 2
@@ -675,10 +680,10 @@ anims/RunUp = SubResource( 4 )
 tree_root = SubResource( 21 )
 anim_player = NodePath("../AnimationPlayer")
 parameters/playback = SubResource( 22 )
-parameters/Attack/blend_position = Vector2( -0.0137994, 0.776471 )
-parameters/Idle/blend_position = Vector2( -0.000426054, 0 )
-parameters/Roll/blend_position = Vector2( 0.0458561, -0.267466 )
-parameters/Run/blend_position = Vector2( -0.998296, -0.0113636 )
+parameters/Attack/blend_position = Vector2( 0, 1 )
+parameters/Idle/blend_position = Vector2( 0, 1 )
+parameters/Roll/blend_position = Vector2( 0, 1 )
+parameters/Run/blend_position = Vector2( 0, 1 )
 
 [node name="HitboxPivot" type="Position2D" parent="."]
 position = Vector2( 0, -4 )
@@ -693,4 +698,14 @@ script = ExtResource( 4 )
 shape = SubResource( 36 )
 disabled = true
 
+[node name="Hurtbox" parent="." instance=ExtResource( 5 )]
+collision_layer = 4
+
+[node name="CollisionShape2D" parent="Hurtbox" index="0"]
+position = Vector2( 0, -4 )
+shape = SubResource( 48 )
+
+[connection signal="area_entered" from="Hurtbox" to="." method="_on_Hurtbox_area_entered"]
+
 [editable path="HitboxPivot/SwordHitbox"]
+[editable path="Hurtbox"]
